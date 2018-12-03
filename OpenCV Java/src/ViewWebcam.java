@@ -12,7 +12,7 @@ public class ViewWebcam {
 		JFrame window = new VideoFrame();
 		Container pane = window.getContentPane();
 		window.setTitle("Webcam Feed");
-		window.setSize(665, 552);
+		window.setSize(665, 552);					// Possibly optimize this line
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 		

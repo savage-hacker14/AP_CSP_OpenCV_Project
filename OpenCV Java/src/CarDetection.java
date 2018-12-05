@@ -45,17 +45,16 @@ public class CarDetection {
 		// Init graphics/GUI
 		// 1: Raw camera feed
 		JFrame raw = new VideoFrame();
-		Container pane = raw.getContentPane();
 		raw.setTitle("Raw Feed");
 		raw.setSize(665, 552);					// Possibly optimize this line
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 		
 		// 2: Filtered camera feed
-		JFrame filtered = new VideoFrame();			// MODIFY THIS!!!
-		Container pane2 = raw.getContentPane();
+		Line randomLine = new Line(0, 0, 0, 0);
+		JFrame filtered = new VideoFrameFiltered(randomLine);
 		filtered.setTitle("Filtered Feed");
-		filtered.setSize(665, 552);					// Possibly optimize this line
+		filtered.setSize(665, 552);				// Possibly optimize this line
 		filtered.setVisible(true);
 		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 
@@ -117,8 +116,11 @@ public class CarDetection {
 	 * @return speed of car [mph]
 	 */
 	public static double getCarSpeed(Point a, Point b) {
+		// Get x values of two midpoints
 		int aX = (int)a.x;
 		int bX = (int)b.x;
+		
+		// Figure out distance [pixels] between first and second point
 		int xDiff = aX - bX;
 		
 		// NOTE: These are distance traveled in the duration of one frame to 
@@ -127,6 +129,7 @@ public class CarDetection {
 		double distanceFt  = (double)pixelDistance / pixelsToFt;
 		double distanceMi = distanceFt / miInFeet;
 		
+		// Convert distance traveled in one frame to one second
 		double miPerS = distanceMi * frameRate;
 		double mph = miPerS * (1 / secToHr);
 		

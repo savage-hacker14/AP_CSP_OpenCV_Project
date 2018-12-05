@@ -35,4 +35,9 @@ public class VideoFrameFiltered extends VideoFrame {
 		g2.setStroke(new BasicStroke(3));	// Set line width to 3px
 		g2.drawLine((int)carLine.x1, (int)carLine.x2, (int)carLine.y1, (int)carLine.y2);
 	}
+	
+	// Setter for carLine variable
+	public void setCarLine(Line l) {
+		carLine = l;
+	}
 }

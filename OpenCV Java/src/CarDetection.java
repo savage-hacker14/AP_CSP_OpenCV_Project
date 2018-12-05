@@ -84,7 +84,8 @@ public class CarDetection {
 			Point carMidPt = getLineMidPt(carLine);
 			
 			// Display filter frame in new gui window
-			// Figure out on 12/5/18
+			((VideoFrameFiltered) filtered).setCarLine(carLine);
+			filtered.repaint();
 			
 			// Set prevCarMidPt to carMidPt
 			prevCarMidPt = carMidPt.clone();

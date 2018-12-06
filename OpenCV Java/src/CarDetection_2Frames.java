@@ -8,6 +8,8 @@
 import java.awt.Container;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 
 // Import opencv libraries required for image processing
@@ -18,6 +20,7 @@ import org.opencv.imgcodecs.*;
 // Import generated GRIP pipeline for car image processsing
 import carPipeline.CarPipeline;
 import carPipeline.CarPipeline.Line;
+import carPipelineTwo.*;
 
 
 public class CarDetection_2Frames {
@@ -36,7 +39,7 @@ public class CarDetection_2Frames {
 		// TODO Auto-generated method stub
 		
 		// Initialize image processing object
-		CarPipeline carDetector = new CarPipeline();
+		CarPipelineTwo carDetector = new CarPipelineTwo();
 		
 		// For image processing, load in baseline img for opencv absdiff
 		Mat baseline = new Mat();
@@ -48,15 +51,15 @@ public class CarDetection_2Frames {
 
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new ImageFrame(car);
+		JFrame raw = new ImageFrame(carDetector.blurOutput());
 		raw.setTitle("Raw Image");
 		raw.setSize(640, 480);					
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// 2: Filtered camera feed
-		Line randomLine = new Line(0, 0, 0, 0);
-		JFrame filtered = new ImageFrameFiltered(car, randomLine);
+		ArrayList<Line> randomLines = new ArrayList<Line>();
+		JFrame filtered = new ImageFrameFiltered(car, randomLines);
 		filtered.setLocation(400, 400);
 		filtered.setTitle("Filtered Image");
 		filtered.setSize(640, 480);				
@@ -71,13 +74,14 @@ public class CarDetection_2Frames {
 		
 		// Obtain desired output from carDetector
 		//ArrayList<Line> lines = carDetector.filterLinesOutput();
-		ArrayList<Line> lines = carDetector.findLinesOutput();
-		System.out.println(carDetector.findLinesOutput().size());
-		System.out.println(lines.size() + " car lines found!");
+		MatOfKeyPoint carBlob = carDetector.findBlobsOutput();
+		Point centerPt = carBlob.toList().get(0).pt;
+		dispLineArray(lines);
+		System.out.println(carDetector.filterLinesOutput().size() + " car lines found!");
 		Line carLine = lines.get(0);		// Assuming there will be only one line in this ArrayList if processing is done well
 		
 		// Display filter frame in new gui window
-		((ImageFrameFiltered) filtered).setCarLine(carLine);
+		((ImageFrameFiltered) filtered).setCarLines(lines);
 		filtered.repaint();
 	}
 	
@@ -124,6 +128,12 @@ public class CarDetection_2Frames {
 		double mph = miPerS * (1 / secToHr);
 		
 		return mph;
+	}
+	
+	public static void dispLineArray(ArrayList<Line> l) {
+		for (Line line : l) {
+			System.out.println((int)line.x1 + ", " + (int)line.x2 + ", " + (int)line.y1 + ", " + (int)line.y2);
+		}
 	}
 
 }

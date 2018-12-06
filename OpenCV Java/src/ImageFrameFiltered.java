@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.border.*;
 
@@ -12,11 +13,11 @@ import org.opencv.videoio.*;
 import carPipeline.CarPipeline.Line;
 
 public class ImageFrameFiltered extends ImageFrame {
-	Line carLine;
+	ArrayList<Line> allLines;
 	
-	public ImageFrameFiltered(Mat img, Line cLine) {
+	public ImageFrameFiltered(Mat img, ArrayList<Line> lines) {
         super(img);
-        carLine = cLine;
+        allLines = lines;
 	}
 	
 	public void paint(Graphics g) {
@@ -26,11 +27,15 @@ public class ImageFrameFiltered extends ImageFrame {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(new Color(0, 255, 0));	// Set green line color
 		g2.setStroke(new BasicStroke(3));	// Set line width to 3px
-		g2.drawLine((int)carLine.x1, (int)carLine.x2, (int)carLine.y1, (int)carLine.y2);
+		
+		for (int i = 0; i < allLines.size(); i++) {
+			Line aLine = allLines.get(i);
+			g2.drawLine((int)aLine.x1, (int)aLine.x2, (int)aLine.y1, (int)aLine.y2);
+		}
 	}
 	
 	// Setter for carLine variable
-	public void setCarLine(Line l) {
-		carLine = l;
+	public void setCarLines(ArrayList<Line> l) {
+		allLines = l;
 	}
 }

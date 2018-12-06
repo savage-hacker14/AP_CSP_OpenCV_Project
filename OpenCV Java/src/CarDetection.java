@@ -40,7 +40,7 @@ public class CarDetection {
 		
 		// For image processing, load in baseline img for opencv absdiff
 		Mat baseline = new Mat();
-		baseline = Imgcodecs.imread(new File("XXXXXXX").getPath());
+		baseline = Imgcodecs.imread(new File("ImagesForPipeline/Baseline.jpeg").getPath());
 		
 		// Init graphics/GUI
 		// 1: Raw camera feed
@@ -50,13 +50,13 @@ public class CarDetection {
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 		
-		// 2: Filtered camera feed
-		Line randomLine = new Line(0, 0, 0, 0);
-		JFrame filtered = new VideoFrameFiltered(randomLine);
-		filtered.setTitle("Filtered Feed");
-		filtered.setSize(665, 552);				// Possibly optimize this line
-		filtered.setVisible(true);
-		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
+//		// 2: Filtered camera feed
+//		Line randomLine = new Line(0, 0, 0, 0);
+//		JFrame filtered = new VideoFrameFiltered(randomLine);
+//		filtered.setTitle("Filtered Feed");
+//		filtered.setSize(665, 552);				// Possibly optimize this line
+//		filtered.setVisible(true);
+//		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 
 //		// Debugging for my functions
 //		Line a = new Line(0, 10, 10, 20);
@@ -84,8 +84,8 @@ public class CarDetection {
 			Point carMidPt = getLineMidPt(carLine);
 			
 			// Display filter frame in new gui window
-			((VideoFrameFiltered) filtered).setCarLine(carLine);
-			filtered.repaint();
+//			((VideoFrameFiltered) filtered).setCarLine(carLine);
+//			filtered.repaint();
 			
 			// Set prevCarMidPt to carMidPt
 			prevCarMidPt = carMidPt.clone();

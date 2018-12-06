@@ -20,7 +20,7 @@ import carPipeline.CarPipeline;
 import carPipeline.CarPipeline.Line;
 
 
-public class CarDetection {
+public class CarDetection_2Frames {
 	// Static variables (used for distance calibration)
 	private static int pixelsToFt = (int)(130 / 16.1); 			// At approx. 45 ft
 	// Avg. car length = 16.1ft
@@ -42,54 +42,43 @@ public class CarDetection {
 		Mat baseline = new Mat();
 		baseline = Imgcodecs.imread(new File("ImagesForPipeline/Baseline.jpeg").getPath());
 		
+		// Load in car image
+		Mat car = new Mat();
+		car = Imgcodecs.imread(new File("ImagesForPipeline/019.jpeg").getPath());
+
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new VideoFrame();
-		raw.setTitle("Raw Feed");
-		raw.setSize(665, 552);					// Possibly optimize this line
+		JFrame raw = new ImageFrame(car);
+		raw.setTitle("Raw Image");
+		raw.setSize(640, 480);					
 		raw.setVisible(true);
-		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
+		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// 2: Filtered camera feed
 		Line randomLine = new Line(0, 0, 0, 0);
-		JFrame filtered = new VideoFrameFiltered(randomLine);
-		filtered.setTitle("Filtered Feed");
-		filtered.setSize(665, 552);				// Possibly optimize this line
+		JFrame filtered = new ImageFrameFiltered(car, randomLine);
+		filtered.setLocation(400, 400);
+		filtered.setTitle("Filtered Image");
+		filtered.setSize(640, 480);				
 		filtered.setVisible(true);
-		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
-
-//		// Debugging for my functions
-//		Line a = new Line(0, 10, 10, 20);
-//		Point midpoint = getLineMidPt(a);
-//		System.out.println("Midpoint of line a is " + midpoint);
-//		System.out.println("Speed: " + getCarSpeed(new Point(0, 50), new Point(8, 50)) + " mph");
+		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
-		// Forever loop
-		Point prevCarMidPt = new Point(0, 0);
-		while (true) {
-			// Capture one frame from webcam
-			// (already done in VideoFrame class)
-			// Display that frame in a gui window
-			raw.repaint();
-			
-			// Perform image processing on the frame
-			Mat rawFrame = new Mat();
-			VideoCapture camera = new VideoCapture();
-			camera.read(rawFrame);
-			carDetector.process(rawFrame, baseline);
-			
-			// Obtain desired output from carDetector
-			ArrayList<Line> lines = carDetector.filterLinesOutput();
-			Line carLine = lines.get(0);		// Assuming there will be only one line in this ArrayList if processing is done well
-			Point carMidPt = getLineMidPt(carLine);
-			
-			// Display filter frame in new gui window
-			((VideoFrameFiltered) filtered).setCarLine(carLine);
-			filtered.repaint();
-			
-			// Set prevCarMidPt to carMidPt
-			prevCarMidPt = carMidPt.clone();
-		}
+		// Display raw image
+		raw.repaint();
+		
+		// Perform image processing on the 2nd image
+		carDetector.process(car, baseline);
+		
+		// Obtain desired output from carDetector
+		//ArrayList<Line> lines = carDetector.filterLinesOutput();
+		ArrayList<Line> lines = carDetector.findLinesOutput();
+		System.out.println(carDetector.findLinesOutput().size());
+		System.out.println(lines.size() + " car lines found!");
+		Line carLine = lines.get(0);		// Assuming there will be only one line in this ArrayList if processing is done well
+		
+		// Display filter frame in new gui window
+		((ImageFrameFiltered) filtered).setCarLine(carLine);
+		filtered.repaint();
 	}
 	
 	// My functions/algorithms for car speed detection

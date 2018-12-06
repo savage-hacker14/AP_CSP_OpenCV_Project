@@ -13,6 +13,12 @@ public class VideoCap {
     VideoCap(){
         cap = new VideoCapture();
         cap.open(0);
+        
+        // Init camera feed to 640x480 resolution
+        int widthID = 3;
+        int heightID = 4;
+        cap.set(widthID, 640);
+        cap.set(heightID, 480);
     } 
  
     BufferedImage getOneFrame() {

@@ -56,7 +56,7 @@ public class CarPipelineTwo {
 		// Step Blur0:
 		Mat blurInput = hsvThresholdOutput;
 		BlurType blurType = BlurType.get("Median Filter");
-		double blurRadius = 29.279279279279287;
+		double blurRadius = 5.0;
 		blur(blurInput, blurType, blurRadius, blurOutput);
 
 		// Step Find_Blobs0:

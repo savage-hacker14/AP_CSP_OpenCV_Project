@@ -46,19 +46,19 @@ public class CarDetection_2Frames {
 		
 		// Load in car image
 		Mat car = new Mat();
-		car = Imgcodecs.imread(new File("ImagesForPipeline/010.jpeg").getPath());
+		car = Imgcodecs.imread(new File("ImagesForPipeline/012.jpeg").getPath());
 
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new ImageFrame(car);
+		JFrame raw = new ImageFrame(carDetector.cvAbsdiffOutput());
 		raw.setTitle("Raw Image");
 		raw.setSize(640, 480);					
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// 2: Filtered camera feed
-		JFrame filtered = new ImageFrameFiltered(car);
-		filtered.setLocation(400, 400);
+		JFrame filtered = new ImageFrameFiltered(carDetector.hsvThresholdOutput());
+		filtered.setLocation(640, 0);
 		filtered.setTitle("Filtered Image");
 		filtered.setSize(640, 480);				
 		filtered.setVisible(true);
@@ -69,6 +69,9 @@ public class CarDetection_2Frames {
 		
 		// Perform image processing on the car image
 		carDetector.process(car, baseline);
+		
+		System.out.println(carDetector.cvAbsdiffOutput().size());
+		System.out.println(carDetector.hsvThresholdOutput().size());
 		
 		// Obtain desired output from carDetector
 		//ArrayList<Line> lines = carDetector.filterLinesOutput();

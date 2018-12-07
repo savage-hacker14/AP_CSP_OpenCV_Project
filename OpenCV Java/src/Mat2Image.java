@@ -54,13 +54,14 @@ public class Mat2Image {
     public void getSpaceHSV(Mat mat) {
         this.mat = mat;
         int w = mat.cols(), h = mat.rows();
-        if (dat == null || dat.length != w * h * 3)
-            dat = new byte[w * h * 3];
+        if (dat == null || dat.length != w * h * 4)
+            dat = new byte[w * h * 4];
         if (img == null || img.getWidth() != w || img.getHeight() != h
-            || img.getType() != BufferedImage.TYPE_BYTE_GRAY)
+            || img.getType() != BufferedImage.TYPE_BYTE_BINARY)
                 img = new BufferedImage(w, h, 
-                            BufferedImage.TYPE_BYTE_GRAY);
+                            BufferedImage.TYPE_BYTE_BINARY);
         }
+    
         BufferedImage getImageHSV(Mat mat){
             getSpaceHSV(mat);
             mat.get(0, 0, dat);

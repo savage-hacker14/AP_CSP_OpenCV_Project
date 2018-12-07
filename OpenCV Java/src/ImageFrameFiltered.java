@@ -32,7 +32,11 @@ public class ImageFrameFiltered extends ImageFrame {
 	}
 	
 	public void paint(Graphics g) {
-		super.paint(g);
+//		super.paint(g);
+		
+		Mat2Image converter = new Mat2Image();
+		BufferedImage img_BuffImg = converter.getImageHSV(image);
+		g.drawImage(img_BuffImg, 0, 0, null);
 		
 		// Draw car line
 		Graphics2D g2 = (Graphics2D) g;

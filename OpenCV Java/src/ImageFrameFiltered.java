@@ -2,22 +2,33 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.swing.border.*;
 
+import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
 // OpenCV Packages
 import org.opencv.videoio.*;
 
 import carPipeline.CarPipeline.Line;
 
 public class ImageFrameFiltered extends ImageFrame {
-	ArrayList<Line> allLines;
+	ArrayList<MatOfPoint> carContours;
 	
-	public ImageFrameFiltered(Mat img, ArrayList<Line> lines) {
+	public ImageFrameFiltered(Mat img) {
         super(img);
-        allLines = lines;
+        carContours = new ArrayList<MatOfPoint>();
+	}
+	
+	public ImageFrameFiltered(Mat img, ArrayList<MatOfPoint> c) {
+        super(img);
+        carContours = c;
 	}
 	
 	public void paint(Graphics g) {
@@ -28,14 +39,16 @@ public class ImageFrameFiltered extends ImageFrame {
 		g2.setColor(new Color(0, 255, 0));	// Set green line color
 		g2.setStroke(new BasicStroke(3));	// Set line width to 3px
 		
-		for (int i = 0; i < allLines.size(); i++) {
-			Line aLine = allLines.get(i);
-			g2.drawLine((int)aLine.x1, (int)aLine.x2, (int)aLine.y1, (int)aLine.y2);
+		// Draw car rectangle
+		// Assuming only 1 car contour was found
+		if (!(carContours.size() == 0)) {
+			Rect carRect = Imgproc.boundingRect(carContours.get(0));
+			g2.drawRect((int)carRect.tl().x, (int)carRect.tl().y, carRect.width, carRect.height);		// Check why box is 50px too high
 		}
 	}
 	
 	// Setter for carLine variable
-	public void setCarLines(ArrayList<Line> l) {
-		allLines = l;
+	public void setCarContour(ArrayList<MatOfPoint> c) {
+		carContours = c;
 	}
 }

@@ -10,8 +10,8 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.*;
 
 public class ImageFrame extends JFrame {
-	private JPanel contentPane;
-	private Mat image;
+	protected JPanel contentPane;
+	protected Mat image;
 	
 	public ImageFrame() {};
 	

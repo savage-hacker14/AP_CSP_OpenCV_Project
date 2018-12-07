@@ -18,7 +18,6 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.imgcodecs.*;
 
 // Import generated GRIP pipeline for car image processsing
-import carPipeline.CarPipeline;
 import carPipeline.CarPipeline.Line;
 import carPipelineTwo.*;
 
@@ -47,19 +46,18 @@ public class CarDetection_2Frames {
 		
 		// Load in car image
 		Mat car = new Mat();
-		car = Imgcodecs.imread(new File("ImagesForPipeline/019.jpeg").getPath());
+		car = Imgcodecs.imread(new File("ImagesForPipeline/010.jpeg").getPath());
 
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new ImageFrame(carDetector.blurOutput());
+		JFrame raw = new ImageFrame(car);
 		raw.setTitle("Raw Image");
 		raw.setSize(640, 480);					
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// 2: Filtered camera feed
-		ArrayList<Line> randomLines = new ArrayList<Line>();
-		JFrame filtered = new ImageFrameFiltered(car, randomLines);
+		JFrame filtered = new ImageFrameFiltered(car);
 		filtered.setLocation(400, 400);
 		filtered.setTitle("Filtered Image");
 		filtered.setSize(640, 480);				
@@ -69,19 +67,15 @@ public class CarDetection_2Frames {
 		// Display raw image
 		raw.repaint();
 		
-		// Perform image processing on the 2nd image
+		// Perform image processing on the car image
 		carDetector.process(car, baseline);
 		
 		// Obtain desired output from carDetector
 		//ArrayList<Line> lines = carDetector.filterLinesOutput();
-		MatOfKeyPoint carBlob = carDetector.findBlobsOutput();
-		Point centerPt = carBlob.toList().get(0).pt;
-		dispLineArray(lines);
-		System.out.println(carDetector.filterLinesOutput().size() + " car lines found!");
-		Line carLine = lines.get(0);		// Assuming there will be only one line in this ArrayList if processing is done well
+		ArrayList<MatOfPoint> carContour = carDetector.findContoursOutput();
 		
 		// Display filter frame in new gui window
-		((ImageFrameFiltered) filtered).setCarLines(lines);
+		((ImageFrameFiltered) filtered).setCarContour(carContour);
 		filtered.repaint();
 	}
 	

@@ -11,7 +11,8 @@ import java.util.HashMap;
 
 import org.opencv.core.*;
 import org.opencv.core.Core.*;
-import org.opencv.features2d.*;
+import org.opencv.features2d.FastFeatureDetector;
+import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.objdetect.*;
@@ -30,6 +31,7 @@ public class CarPipelineTwo {
 	private Mat hsvThresholdOutput = new Mat();
 	private Mat blurOutput = new Mat();
 	private MatOfKeyPoint findBlobsOutput = new MatOfKeyPoint();
+	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -64,6 +66,11 @@ public class CarPipelineTwo {
 		boolean findBlobsDarkBlobs = false;
 		findBlobs(findBlobsInput, findBlobsMinArea, findBlobsCircularity, findBlobsDarkBlobs, findBlobsOutput);
 
+		// Step Find_Contours0:
+		Mat findContoursInput = blurOutput;
+		boolean findContoursExternalOnly = false;
+		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
+
 	}
 
 	/**
@@ -96,6 +103,14 @@ public class CarPipelineTwo {
 	 */
 	public MatOfKeyPoint findBlobsOutput() {
 		return findBlobsOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a Find_Contours.
+	 * @return ArrayList<MatOfPoint> output from Find_Contours.
+	 */
+	public ArrayList<MatOfPoint> findContoursOutput() {
+		return findContoursOutput;
 	}
 
 
@@ -201,7 +216,6 @@ public class CarPipelineTwo {
 	private void findBlobs(Mat input, double minArea, double[] circularity,
 		Boolean darkBlobs, MatOfKeyPoint blobList) {
 		FastFeatureDetector blobDet = FastFeatureDetector.create();
-		
 		try {
 			File tempFile = File.createTempFile("config", ".xml");
 
@@ -249,6 +263,28 @@ public class CarPipelineTwo {
 		}
 
 		blobDet.detect(input, blobList);
+	}
+
+	/**
+	 * Sets the values of pixels in a binary image to their distance to the nearest black pixel.
+	 * @param input The image on which to perform the Distance Transform.
+	 * @param type The Transform.
+	 * @param maskSize the size of the mask.
+	 * @param output The image in which to store the output.
+	 */
+	private void findContours(Mat input, boolean externalOnly,
+		List<MatOfPoint> contours) {
+		Mat hierarchy = new Mat();
+		contours.clear();
+		int mode;
+		if (externalOnly) {
+			mode = Imgproc.RETR_EXTERNAL;
+		}
+		else {
+			mode = Imgproc.RETR_LIST;
+		}
+		int method = Imgproc.CHAIN_APPROX_SIMPLE;
+		Imgproc.findContours(input, contours, hierarchy, mode, method);
 	}
 
 

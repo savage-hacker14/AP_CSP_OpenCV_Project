@@ -18,6 +18,7 @@ import org.opencv.imgcodecs.*;
 // Import generated GRIP pipeline for car image processsing
 import carPipeline.CarPipeline;
 import carPipeline.CarPipeline.Line;
+import carPipelineTwo.CarPipelineTwo;
 
 
 public class CarDetection {
@@ -36,25 +37,24 @@ public class CarDetection {
 		// TODO Auto-generated method stub
 		
 		// Initialize image processing object
-		CarPipeline carDetector = new CarPipeline();
+		CarPipelineTwo carDetector = new CarPipelineTwo();
 		
 		// For image processing, load in baseline img for opencv absdiff
 		Mat baseline = new Mat();
-		baseline = Imgcodecs.imread(new File("ImagesForPipeline/Baseline.jpeg").getPath());
+		baseline = Imgcodecs.imread(new File("ImagesForPipeline/Baseline2.jpeg").getPath());
 		
 		// Init graphics/GUI
 		// 1: Raw camera feed
 		JFrame raw = new VideoFrame();
 		raw.setTitle("Raw Feed");
-		raw.setSize(665, 552);					// Possibly optimize this line
+		raw.setSize(640, 480);					// Possibly optimize this line
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 		
 		// 2: Filtered camera feed
-		Line randomLine = new Line(0, 0, 0, 0);
-		JFrame filtered = new VideoFrameFiltered(randomLine);
+		JFrame filtered = new VideoFrameFiltered();
 		filtered.setTitle("Filtered Feed");
-		filtered.setSize(665, 552);				// Possibly optimize this line
+		filtered.setSize(640, 480);				// Possibly optimize this line
 		filtered.setVisible(true);
 		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
 
@@ -79,16 +79,14 @@ public class CarDetection {
 			carDetector.process(rawFrame, baseline);
 			
 			// Obtain desired output from carDetector
-			ArrayList<Line> lines = carDetector.filterLinesOutput();
-			Line carLine = lines.get(0);		// Assuming there will be only one line in this ArrayList if processing is done well
-			Point carMidPt = getLineMidPt(carLine);
+			ArrayList<MatOfPoint> c = carDetector.findContoursOutput();
 			
 			// Display filter frame in new gui window
-			((VideoFrameFiltered) filtered).setCarLine(carLine);
+			((VideoFrameFiltered) filtered).setCarContours(c);
 			filtered.repaint();
 			
 			// Set prevCarMidPt to carMidPt
-			prevCarMidPt = carMidPt.clone();
+			//prevCarMidPt = carMidPt.clone();
 		}
 	}
 	

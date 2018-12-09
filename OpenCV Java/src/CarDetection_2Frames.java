@@ -34,7 +34,7 @@ public class CarDetection_2Frames {
 	private static int speedLimit = 25; 	// [mph]
 	private static int frameRate = 30;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 		
 		// Initialize image processing object
@@ -46,27 +46,25 @@ public class CarDetection_2Frames {
 		
 		// Load in car image
 		Mat car = new Mat();
-		car = Imgcodecs.imread(new File("ImagesForPipeline/012.jpeg").getPath());
+		car = Imgcodecs.imread(new File("ImagesForPipeline/004.jpeg").getPath());
 
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new ImageFrame(carDetector.cvAbsdiffOutput());
+		JFrame raw = new ImageFrame(car);
 		raw.setTitle("Raw Image");
+		//raw.setLocation(0, 0);
 		raw.setSize(640, 480);					
 		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// 2: Filtered camera feed
-		JFrame filtered = new ImageFrameFiltered(carDetector.hsvThresholdOutput());
+		JFrame filtered = new ImageFrameFiltered(car);
 		filtered.setLocation(640, 0);
 		filtered.setTitle("Filtered Image");
 		filtered.setSize(640, 480);				
 		filtered.setVisible(true);
 		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		
-		// Display raw image
-		raw.repaint();
-		
+
 		// Perform image processing on the car image
 		carDetector.process(car, baseline);
 		
@@ -80,6 +78,14 @@ public class CarDetection_2Frames {
 		// Display filter frame in new gui window
 		((ImageFrameFiltered) filtered).setCarContour(carContour);
 		filtered.repaint();
+		
+		
+		// Display raw image
+		raw.repaint();
+		
+		while (true) {
+			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
+		}
 	}
 	
 	// My functions/algorithms for car speed detection

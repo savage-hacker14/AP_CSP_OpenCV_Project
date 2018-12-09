@@ -17,7 +17,7 @@ public class ImageFrame extends JFrame {
 	
 	public ImageFrame(Mat img) {
         contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        //contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
         
@@ -29,7 +29,7 @@ public class ImageFrame extends JFrame {
 		
 		Mat2Image converter = new Mat2Image();
 		BufferedImage img_BuffImg = converter.getImage(image);
-		
-		g.drawImage(img_BuffImg, 0, 0, null);
+
+		g.drawImage(img_BuffImg, 0, 0, this.getWidth(), this.getHeight(), null);
 	}
 }

@@ -4,12 +4,17 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
 
 import carPipeline.CarPipeline.Line;
 
 public class VideoFrameFiltered extends VideoFrame {
 	// Instance variables
-	Line carLine;
+	ArrayList<MatOfPoint> carContours;
 	
 	// Default constructor
 	public VideoFrameFiltered() {
@@ -17,9 +22,9 @@ public class VideoFrameFiltered extends VideoFrame {
 	}
 	
 	// My custom constructor
-	public VideoFrameFiltered(Line l) {
+	public VideoFrameFiltered(ArrayList<MatOfPoint> c) {
 		super();
-		carLine = l;
+		carContours = c;
 	}
 	
 	// Create VideoCap Object
@@ -33,11 +38,14 @@ public class VideoFrameFiltered extends VideoFrame {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(new Color(0, 255, 0));	// Set green line color
 		g2.setStroke(new BasicStroke(3));	// Set line width to 3px
-		g2.drawLine((int)carLine.x1, (int)carLine.x2, (int)carLine.y1, (int)carLine.y2);
+		
+		Rect carRect = Imgproc.boundingRect(carContours.get(0));
+		g2.drawRect((int)carRect.tl().x, (int)carRect.tl().y, carRect.width, carRect.height);
+
 	}
 	
 	// Setter for carLine variable
-	public void setCarLine(Line l) {
-		carLine = l;
+	public void setCarContours(ArrayList<MatOfPoint> c) {
+		carContours = c;
 	}
 }

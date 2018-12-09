@@ -32,11 +32,11 @@ public class ImageFrameFiltered extends ImageFrame {
 	}
 	
 	public void paint(Graphics g) {
-//		super.paint(g);
+		super.paint(g);
 		
-		Mat2Image converter = new Mat2Image();
-		BufferedImage img_BuffImg = converter.getImageHSV(image);
-		g.drawImage(img_BuffImg, 0, 0, null);
+//		Mat2Image converter = new Mat2Image();
+//		BufferedImage img_BuffImg = converter.getImageHSV(image);
+//		g.drawImage(img_BuffImg, 0, 57, 640, 480, null);
 		
 		// Draw car line
 		Graphics2D g2 = (Graphics2D) g;
@@ -47,7 +47,7 @@ public class ImageFrameFiltered extends ImageFrame {
 		// Assuming only 1 car contour was found
 		if (!(carContours.size() == 0)) {
 			Rect carRect = Imgproc.boundingRect(carContours.get(0));
-			g2.drawRect((int)carRect.tl().x, (int)carRect.tl().y, carRect.width, carRect.height);		// Check why box is 50px too high
+			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 57, carRect.width, carRect.height);		// Check why box is 50px too high
 		}
 	}
 	

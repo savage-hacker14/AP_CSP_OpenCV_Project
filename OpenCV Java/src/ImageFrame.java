@@ -32,4 +32,9 @@ public class ImageFrame extends JFrame {
 
 		g.drawImage(img_BuffImg, 0, 0, this.getWidth(), this.getHeight(), null);
 	}
+	
+	// Setter for car image variable
+	public void setCarImg(Mat img) {
+		image = img;
+	}
 }

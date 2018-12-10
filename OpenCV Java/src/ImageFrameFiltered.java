@@ -21,6 +21,10 @@ import carPipeline.CarPipeline.Line;
 public class ImageFrameFiltered extends ImageFrame {
 	ArrayList<MatOfPoint> carContours;
 	
+	public ImageFrameFiltered() {
+		super();
+	}
+	
 	public ImageFrameFiltered(Mat img) {
         super(img);
         carContours = new ArrayList<MatOfPoint>();
@@ -36,7 +40,7 @@ public class ImageFrameFiltered extends ImageFrame {
 		
 //		Mat2Image converter = new Mat2Image();
 //		BufferedImage img_BuffImg = converter.getImageHSV(image);
-//		g.drawImage(img_BuffImg, 0, 57, 640, 480, null);
+//		g.drawImage(img_BuffImg, 0, 20, this.getWidth(), this.getHeight(), null);
 		
 		// Draw car line
 		Graphics2D g2 = (Graphics2D) g;
@@ -45,9 +49,10 @@ public class ImageFrameFiltered extends ImageFrame {
 		
 		// Draw car rectangle
 		// Assuming only 1 car contour was found
+		System.out.println(carContours.size());
 		if (!(carContours.size() == 0)) {
 			Rect carRect = Imgproc.boundingRect(carContours.get(0));
-			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 57, carRect.width, carRect.height);		// Check why box is 50px too high
+			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 30, carRect.width, carRect.height);		// Check why box is 50px too high
 		}
 	}
 	

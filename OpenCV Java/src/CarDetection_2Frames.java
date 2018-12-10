@@ -5,16 +5,14 @@
 
 // Imports
 // Import java packages for graphics and arrays
-import java.awt.Container;
+import java.awt.image.FilteredImageSource;
 import java.io.File;
+import java.io.FilterReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.swing.JFrame;
 
 // Import opencv libraries required for image processing
 import org.opencv.core.*;
-import org.opencv.videoio.VideoCapture;
 import org.opencv.imgcodecs.*;
 
 // Import generated GRIP pipeline for car image processsing
@@ -46,70 +44,83 @@ public class CarDetection_2Frames {
 		
 		// Load in car image
 		Mat car = new Mat();
-		car = Imgcodecs.imread(new File("ImagesForPipeline/004.jpeg").getPath());
+		car = Imgcodecs.imread(new File("ImagesForPipeline/018.jpeg").getPath());
 
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new ImageFrame(car);
+		JFrame raw = new ImageFrame();
 		raw.setTitle("Raw Image");
 		//raw.setLocation(0, 0);
 		raw.setSize(640, 480);					
-		raw.setVisible(true);
 		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// 2: Filtered camera feed
-		JFrame filtered = new ImageFrameFiltered(car);
+		JFrame filtered = new ImageFrameFiltered();
 		filtered.setLocation(640, 0);
 		filtered.setTitle("Filtered Image");
 		filtered.setSize(640, 480);				
-		filtered.setVisible(true);
 		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-
-		// Perform image processing on the car image
-		carDetector.process(car, baseline);
-		
-		System.out.println(carDetector.cvAbsdiffOutput().size());
-		System.out.println(carDetector.hsvThresholdOutput().size());
-		
-		// Obtain desired output from carDetector
-		//ArrayList<Line> lines = carDetector.filterLinesOutput();
-		ArrayList<MatOfPoint> carContour = carDetector.findContoursOutput();
-		
-		// Display filter frame in new gui window
-		((ImageFrameFiltered) filtered).setCarContour(carContour);
-		filtered.repaint();
 		
 		
 		// Display raw image
 		raw.repaint();
 		
+		String i = "1";
 		while (true) {
 			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
+			
+			if (Integer.parseInt(i) < 10) {
+				i = "0" + Integer.parseInt(i);
+				System.out.println(i);
+			}
+			
+			car = Imgcodecs.imread(new File("ImagesForPipeline/0" + i + ".jpeg").getPath());
+			((ImageFrame) raw).setCarImg(car);
+			raw.setVisible(true);
+			raw.setSize(640, 480);
+			raw.setTitle("Raw Image");
+			((ImageFrameFiltered) filtered).setCarImg(car);
+			filtered.setVisible(true);
+			filtered.setTitle("Filtered Image");
+			filtered.setSize(640, 480);	
+			filtered.setLocation(640, 0);
+			
+			// Perform image processing on the car image
+			carDetector.process(car, baseline);
+			
+			System.out.println(carDetector.cvAbsdiffOutput().size());
+			System.out.println(carDetector.hsvThresholdOutput().size());
+			
+			// Obtain desired output from carDetector
+			//ArrayList<Line> lines = carDetector.filterLinesOutput();
+			ArrayList<MatOfPoint> carContour = carDetector.findContoursOutput();
+			
+			// Display filter frame in new gui window
+			((ImageFrameFiltered) filtered).setCarContour(carContour);
+			filtered.repaint();
+			
+			Thread.sleep(500);
+			i = Integer.toString(Integer.parseInt(i) + 1);
 		}
 	}
 	
 	// My functions/algorithms for car speed detection
 	/**
 	 * 
-	 * @param line l
-	 * @return midpoint of line l (as object Point)
+	 * @param car box (as object Rect)
+	 * @return midpoint of car box (as object Point)
 	 */
-	public static Point getLineMidPt(Line l) {
-		int x1 = (int)l.x1;
-		int x2 = (int)l.x2;
-		int y1 = (int)l.y1;
-		int y2 = (int)l.y2;
+	public static Point getBoxMidPt(Rect car) {
+		int midX = (int)(car.tl().x + car.br().x) / 2;
+		int midY = (int)(car.tl().y + car.br().y) / 2;
 		
-		int avgX = (x1 + x2) / 2;
-		int avgY = (y1 + y2) / 2;
-		
-		return new Point(avgX, avgY);
+		return new Point(midX, midY);
 	}
 	
 	/**
 	 * 
-	 * @param a - midpoint of one car line
-	 * @param b - midpoint of 
+	 * @param a - midpoint of one car box
+	 * @param b - midpoint of another car box
 	 * @return speed of car [mph]
 	 */
 	public static double getCarSpeed(Point a, Point b) {
@@ -133,6 +144,10 @@ public class CarDetection_2Frames {
 		return mph;
 	}
 	
+	/**
+	 * @deprecated
+	 * @param l
+	 */
 	public static void dispLineArray(ArrayList<Line> l) {
 		for (Line line : l) {
 			System.out.println((int)line.x1 + ", " + (int)line.x2 + ", " + (int)line.y1 + ", " + (int)line.y2);

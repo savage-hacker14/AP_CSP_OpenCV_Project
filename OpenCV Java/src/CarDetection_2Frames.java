@@ -65,6 +65,7 @@ public class CarDetection_2Frames {
 		raw.repaint();
 		
 		String i = "1";
+		Rect prevCarBox = new Rect();
 		while (Integer.parseInt(i) <= 20) {
 			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
 			
@@ -87,8 +88,8 @@ public class CarDetection_2Frames {
 			// Perform image processing on the car image
 			carDetector.process(car, baseline);
 			
-			System.out.println(carDetector.cvAbsdiffOutput().size());
-			System.out.println(carDetector.hsvThresholdOutput().size());
+			//System.out.println(carDetector.cvAbsdiffOutput().size());
+			//System.out.println(carDetector.hsvThresholdOutput().size());
 			
 			// Obtain desired output from carDetector
 			//ArrayList<Line> lines = carDetector.filterLinesOutput();
@@ -98,7 +99,12 @@ public class CarDetection_2Frames {
 			((ImageFrameFiltered) filtered).setCarContour(carContour);
 			filtered.repaint();
 			
-			Thread.sleep(500);
+			Point carBoxMidPt1 = getBoxMidPt(prevCarBox);
+			prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();
+			Point carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
+			System.out.println("Speed: " + getCarSpeed(carBoxMidPt1, carBoxMidPt2) + " mph!");
+			
+			Thread.sleep(1000);
 			i = Integer.toString(Integer.parseInt(i) + 1);
 		}
 	}

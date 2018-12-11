@@ -59,4 +59,8 @@ public class ImageFrameFiltered extends ImageFrame {
 	public void setCarContour(ArrayList<MatOfPoint> c) {
 		carContours = c;
 	}
+	
+	public Rect getCarBox() {
+		return Imgproc.boundingRect(carContours.get(0));
+	}
 }

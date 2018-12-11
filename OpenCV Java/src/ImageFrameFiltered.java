@@ -44,13 +44,12 @@ public class ImageFrameFiltered extends ImageFrame {
 		
 		// Draw car line
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(new Color(0, 255, 0));	// Set green line color
+		g2.setColor(new Color(255, 0, 213));	// Set green line color
 		g2.setStroke(new BasicStroke(3));	// Set line width to 3px
 		
 		// Draw car rectangle
 		// Assuming only 1 car contour was found
-		System.out.println(carContours.size());
-		if (!(carContours.size() == 0)) {
+		if (carContours != null && !(carContours.size() == 0)) {
 			Rect carRect = Imgproc.boundingRect(carContours.get(0));
 			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 30, carRect.width, carRect.height);		// Check why box is 50px too high
 		}

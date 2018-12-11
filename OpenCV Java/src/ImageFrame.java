@@ -13,7 +13,11 @@ public class ImageFrame extends JFrame {
 	protected JPanel contentPane;
 	protected Mat image;
 	
-	public ImageFrame() {};
+	public ImageFrame() {
+		contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+	};
 	
 	public ImageFrame(Mat img) {
         contentPane = new JPanel();
@@ -36,5 +40,6 @@ public class ImageFrame extends JFrame {
 	// Setter for car image variable
 	public void setCarImg(Mat img) {
 		image = img;
+		this.repaint();
 	}
 }

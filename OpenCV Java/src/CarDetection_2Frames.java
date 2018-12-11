@@ -17,7 +17,7 @@ import org.opencv.imgcodecs.*;
 
 // Import generated GRIP pipeline for car image processsing
 import carPipeline.CarPipeline.Line;
-import carPipelineTwo.*;
+import carPipelineThree.*;;
 
 
 public class CarDetection_2Frames {
@@ -36,7 +36,7 @@ public class CarDetection_2Frames {
 		// TODO Auto-generated method stub
 		
 		// Initialize image processing object
-		CarPipelineTwo carDetector = new CarPipelineTwo();
+		CarPipelineThree carDetector = new CarPipelineThree();
 		
 		// For image processing, load in baseline img for opencv absdiff
 		Mat baseline = new Mat();
@@ -61,12 +61,11 @@ public class CarDetection_2Frames {
 		filtered.setSize(640, 480);				
 		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
-		
 		// Display raw image
 		raw.repaint();
 		
 		String i = "1";
-		while (true) {
+		while (Integer.parseInt(i) <= 20) {
 			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
 			
 			if (Integer.parseInt(i) < 10) {
@@ -93,7 +92,7 @@ public class CarDetection_2Frames {
 			
 			// Obtain desired output from carDetector
 			//ArrayList<Line> lines = carDetector.filterLinesOutput();
-			ArrayList<MatOfPoint> carContour = carDetector.findContoursOutput();
+			ArrayList<MatOfPoint> carContour = carDetector.filterContoursOutput();
 			
 			// Display filter frame in new gui window
 			((ImageFrameFiltered) filtered).setCarContour(carContour);

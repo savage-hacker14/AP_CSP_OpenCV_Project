@@ -103,10 +103,9 @@ public class CarDetection_2Frames {
 			
 			if (((ImageFrameFiltered) filtered).isCarDetected() == true) {
 				// If getter doesn't return new Rect object (meaning there is a car detected
-				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();
+				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();	// Set prev car box to current car box
 				Point carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
-				//System.out.println(carBoxMidPt1);
-				//System.out.println(carBoxMidPt2);
+				System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
 				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2);
 				int speedRounded = (int)(speed * 100) / 100;
 				System.out.println("Speed: " + speedRounded + " mph!");

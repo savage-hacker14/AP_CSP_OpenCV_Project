@@ -71,7 +71,7 @@ public class CarDetection_2Frames {
 			
 			if (Integer.parseInt(i) < 10) {
 				i = "0" + Integer.parseInt(i);
-				//System.out.println(i);
+				System.out.println(i);
 			}
 			
 			car = Imgcodecs.imread(new File("ImagesForPipeline/0" + i + ".jpeg").getPath());
@@ -83,7 +83,7 @@ public class CarDetection_2Frames {
 			filtered.setVisible(true);
 			filtered.setTitle("Filtered Image");
 			filtered.setSize(640, 480);	
-			filtered.setLocation(1000, 0);
+			filtered.setLocation(640, 0);
 			
 			// Perform image processing on the car image
 			carDetector.process(car, baseline);
@@ -100,15 +100,20 @@ public class CarDetection_2Frames {
 			filtered.repaint();
 			
 			Point carBoxMidPt1 = getBoxMidPt(prevCarBox);
+			Point carBoxMidPt2 = new Point();
 			
 			if (((ImageFrameFiltered) filtered).isCarDetected() == true) {
 				// If getter doesn't return new Rect object (meaning there is a car detected
 				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();	// Set prev car box to current car box
-				Point carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
+				carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
 				System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
 				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2);
 				int speedRounded = (int)(speed * 100) / 100;
-				System.out.println("Speed: " + speedRounded + " mph!");
+				System.out.println("Speed: " + speedRounded + " mph!" + "\n");
+			}
+			else {
+				// If car is not detected, then set previous car point to previous car point not 0,0
+				carBoxMidPt1 = carBoxMidPt2;
 			}
 			
 			Thread.sleep(1000);

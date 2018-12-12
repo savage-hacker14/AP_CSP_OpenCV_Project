@@ -57,8 +57,8 @@ public class ImageFrameFiltered extends ImageFrame {
 		// Draw car rectangle
 		// Assuming only 1 car contour was found
 		if (carContours != null && carContours.size() != 0) {
-			Rect carRect = Imgproc.boundingRect(carContours.get(0));
-			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 57, carRect.width, carRect.height);	
+			Rect carRect = getCarBox();
+			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 30, carRect.width, carRect.height);	
 			// Do +30 or +57 on y coordinate depending on which computer program is run on
 		}
 	}
@@ -67,8 +67,11 @@ public class ImageFrameFiltered extends ImageFrame {
 	public void setCarContour(ArrayList<MatOfPoint> c) {
 		carContours = c;
 		
-        if (c != null && c.size() != 0) {
+        if (carContours.size() != 0) {
         	carDetected = true;
+        }
+        else {
+        	carDetected = false;
         }
 	}
 	

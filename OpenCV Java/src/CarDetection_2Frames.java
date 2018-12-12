@@ -22,9 +22,9 @@ import carPipelineThree.*;;
 
 public class CarDetection_2Frames {
 	// Static variables (used for distance calibration)
-	private static int pixelsToFt = (int)(130 / 16.1); 			// At approx. 45 ft
-	// Avg. car length = 16.1ft
-	// Avg car pixel length @ ~45ft: 130 pixels
+	private static int pixelsToFt = (int)(130 / 15); 			
+	// Avg. car length = 15ft
+	// Avg car pixel length @ ~58ft: 130 pixels
 	private static double secToHr = 1 / 3600.0;
 	private static int miInFeet = 5280;
 	
@@ -71,7 +71,7 @@ public class CarDetection_2Frames {
 			
 			if (Integer.parseInt(i) < 10) {
 				i = "0" + Integer.parseInt(i);
-				System.out.println(i);
+				//System.out.println(i);
 			}
 			
 			car = Imgcodecs.imread(new File("ImagesForPipeline/0" + i + ".jpeg").getPath());
@@ -83,7 +83,7 @@ public class CarDetection_2Frames {
 			filtered.setVisible(true);
 			filtered.setTitle("Filtered Image");
 			filtered.setSize(640, 480);	
-			filtered.setLocation(640, 0);
+			filtered.setLocation(1000, 0);
 			
 			// Perform image processing on the car image
 			carDetector.process(car, baseline);
@@ -100,9 +100,17 @@ public class CarDetection_2Frames {
 			filtered.repaint();
 			
 			Point carBoxMidPt1 = getBoxMidPt(prevCarBox);
-			prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();
-			Point carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
-			System.out.println("Speed: " + getCarSpeed(carBoxMidPt1, carBoxMidPt2) + " mph!");
+			
+			if (((ImageFrameFiltered) filtered).isCarDetected() == true) {
+				// If getter doesn't return new Rect object (meaning there is a car detected
+				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();
+				Point carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
+				//System.out.println(carBoxMidPt1);
+				//System.out.println(carBoxMidPt2);
+				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2);
+				int speedRounded = (int)(speed * 100) / 100;
+				System.out.println("Speed: " + speedRounded + " mph!");
+			}
 			
 			Thread.sleep(1000);
 			i = Integer.toString(Integer.parseInt(i) + 1);

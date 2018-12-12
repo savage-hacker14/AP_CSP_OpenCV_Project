@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 // Import opencv libraries required for image processing
 import org.opencv.core.*;
 import org.opencv.imgcodecs.*;
+import org.opencv.videoio.VideoCapture;
 
 // Import generated GRIP pipeline for car image processsing
 import carPipeline.CarPipeline.Line;
@@ -22,7 +23,7 @@ import carPipelineThree.*;;
 
 public class CarDetection_2Frames {
 	// Static variables (used for distance calibration)
-	private static int pixelsToFt = (int)(130 / 15); 			
+	private static double pixelsToFt = 8.925;			
 	// Avg. car length = 15ft
 	// Avg car pixel length @ ~58ft: 130 pixels
 	private static double secToHr = 1 / 3600.0;
@@ -30,7 +31,9 @@ public class CarDetection_2Frames {
 	
 	// General variables
 	private static int speedLimit = 25; 	// [mph]
-	private static int frameRate = 30;
+	//private static int frameRate = 30;
+	private static int frameRate = 10;
+	// 10 fps because sample images were taken every 0.1 sec so 10x per sec
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -102,14 +105,19 @@ public class CarDetection_2Frames {
 			Point carBoxMidPt1 = getBoxMidPt(prevCarBox);
 			Point carBoxMidPt2 = new Point();
 			
+//			VideoCapture c = new VideoCapture();
+//			c.open(0);
+//			System.out.println(c.get(5));
+			
 			if (((ImageFrameFiltered) filtered).isCarDetected() == true) {
 				// If getter doesn't return new Rect object (meaning there is a car detected
 				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();	// Set prev car box to current car box
 				carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
-				System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
-				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2);
+				//System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
+				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2);				
 				int speedRounded = (int)(speed * 100) / 100;
-				System.out.println("Speed: " + speedRounded + " mph!" + "\n");
+				
+				((ImageFrameFiltered) filtered).setCarSpeed(speedRounded);
 			}
 			else {
 				// If car is not detected, then set previous car point to previous car point not 0,0

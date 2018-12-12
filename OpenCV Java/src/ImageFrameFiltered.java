@@ -21,6 +21,7 @@ import carPipeline.CarPipeline.Line;
 public class ImageFrameFiltered extends ImageFrame {
 	ArrayList<MatOfPoint> carContours;
 	private boolean carDetected;
+	private double carSpeed;
 	
 	public ImageFrameFiltered() {
 		super();
@@ -58,8 +59,16 @@ public class ImageFrameFiltered extends ImageFrame {
 		// Assuming only 1 car contour was found
 		if (carContours != null && carContours.size() != 0) {
 			Rect carRect = getCarBox();
-			g2.drawRect((int)(carRect.tl().x), (int)(carRect.tl().y) + 30, carRect.width, carRect.height);	
+			int x = (int)(carRect.tl().x);
+			int y = (int)(carRect.tl().y) + 57;
+			g2.drawRect(x, y, carRect.width, carRect.height);	
 			// Do +30 or +57 on y coordinate depending on which computer program is run on
+			
+			// Draw car speed above box
+			g2.setColor(new Color(255, 255, 0));	
+			g2.setFont(new Font("Verdana", Font.BOLD, 30));
+			String carSpeedToStr = Double.toString(carSpeed) + " mph";
+			g2.drawString(carSpeedToStr, x, y);
 		}
 	}
 	
@@ -73,6 +82,11 @@ public class ImageFrameFiltered extends ImageFrame {
         else {
         	carDetected = false;
         }
+	}
+	
+	// Setter for carLine variable
+	public void setCarSpeed(double s) {
+		carSpeed = s;
 	}
 	
 	public Rect getCarBox() {

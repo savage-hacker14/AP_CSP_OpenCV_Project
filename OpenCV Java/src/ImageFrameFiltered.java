@@ -11,6 +11,7 @@ import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 // OpenCV Packages
@@ -60,7 +61,7 @@ public class ImageFrameFiltered extends ImageFrame {
 		if (carContours != null && carContours.size() != 0) {
 			Rect carRect = getCarBox();
 			int x = (int)(carRect.tl().x);
-			int y = (int)(carRect.tl().y) + 57;
+			int y = (int)(carRect.tl().y) + 30;
 			g2.drawRect(x, y, carRect.width, carRect.height);	
 			// Do +30 or +57 on y coordinate depending on which computer program is run on
 			
@@ -69,6 +70,7 @@ public class ImageFrameFiltered extends ImageFrame {
 			g2.setFont(new Font("Verdana", Font.BOLD, 30));
 			String carSpeedToStr = Double.toString(carSpeed) + " mph";
 			g2.drawString(carSpeedToStr, x, y);
+			
 		}
 	}
 	
@@ -82,6 +84,17 @@ public class ImageFrameFiltered extends ImageFrame {
         else {
         	carDetected = false;
         }
+	}
+	
+	public Point getCarBoxMidPt(Rect car) {
+		int midX = (int)(car.tl().x + car.br().x) / 2;
+		int midY = (int)(car.tl().y + car.br().y) / 2;
+		
+		return new Point(midX, midY);
+	}
+	
+	public Color getCarColor(Rect car) {
+		Point middle = getCarBoxMidPt(car);
 	}
 	
 	// Setter for carLine variable

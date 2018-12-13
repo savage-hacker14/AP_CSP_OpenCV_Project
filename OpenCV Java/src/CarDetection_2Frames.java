@@ -5,9 +5,13 @@
 
 // Imports
 // Import java packages for graphics and arrays
+import java.awt.Color;
 import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.FilterReader;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -67,8 +71,18 @@ public class CarDetection_2Frames {
 		// Display raw image
 		raw.repaint();
 		
+		
+		
 		String i = "1";
 		Rect prevCarBox = new Rect();
+		int framesSinceLastCar = 1;
+		
+		ArrayList<String> times = new ArrayList<String>();
+		ArrayList<Double> speeds = new ArrayList<Double>();
+		ArrayList<Color> colors = new ArrayList<Color>();
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
+		
 		while (Integer.parseInt(i) <= 20) {
 			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
 			
@@ -114,18 +128,38 @@ public class CarDetection_2Frames {
 				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();	// Set prev car box to current car box
 				carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
 				//System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
-				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2);				
+				System.out.println(framesSinceLastCar);
+				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;				
 				int speedRounded = (int)(speed * 100) / 100;
 				
 				((ImageFrameFiltered) filtered).setCarSpeed(speedRounded);
+				
+				// Add car data to array lists
+				LocalDateTime now = LocalDateTime.now();	
+				String time = now.toString().substring(11);
+				times.add(time);
+				speeds.add(new Double(speedRounded));
+				Color carColor = 
+				
+				
+				framesSinceLastCar = 1;
 			}
 			else {
 				// If car is not detected, then set previous car point to previous car point not 0,0
 				carBoxMidPt1 = carBoxMidPt2;
+				framesSinceLastCar++;
 			}
 			
 			Thread.sleep(1000);
 			i = Integer.toString(Integer.parseInt(i) + 1);
+		}
+		
+		DataLogger d = new DataLogger(times, speeds, colors);
+		try {
+			d.logData();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

@@ -128,18 +128,25 @@ public class CarDetection_2Frames {
 				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();	// Set prev car box to current car box
 				carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
 				//System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
-				System.out.println(framesSinceLastCar);
-				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;				
-				int speedRounded = (int)(speed * 100) / 100;
+				//System.out.println(framesSinceLastCar);
+				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;	
+				int speedRounded;
+				if (speed - (int)speed < 0.5) {
+					speedRounded = (int)speed;
+				}
+				else {
+					speedRounded = (int)(speed + 1);
+				}
 				
 				((ImageFrameFiltered) filtered).setCarSpeed(speedRounded);
 				
 				// Add car data to array lists
 				LocalDateTime now = LocalDateTime.now();	
-				String time = now.toString().substring(11);
+				String time = now.toString().substring(11, 19);
 				times.add(time);
 				speeds.add(new Double(speedRounded));
-				Color carColor = 
+				Color carColor = ((ImageFrameFiltered) filtered).getCarColor();
+				colors.add(carColor);
 				
 				
 				framesSinceLastCar = 1;
@@ -156,11 +163,18 @@ public class CarDetection_2Frames {
 		
 		DataLogger d = new DataLogger(times, speeds, colors);
 		try {
+			System.out.print("Logging data...\t");
 			d.logData();
+			System.out.println("Done!");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// Clear time, speed, and color lists
+		times = null;
+		speeds = null;
+		colors = null;
 	}
 	
 	// My functions/algorithms for car speed detection

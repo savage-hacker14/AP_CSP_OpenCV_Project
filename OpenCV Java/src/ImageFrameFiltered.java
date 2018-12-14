@@ -20,7 +20,8 @@ import org.opencv.videoio.*;
 import carPipeline.CarPipeline.Line;
 
 public class ImageFrameFiltered extends ImageFrame {
-	ArrayList<MatOfPoint> carContours;
+	private ArrayList<MatOfPoint> carContours;
+	private Rect carRect;
 	private boolean carDetected;
 	private double carSpeed;
 	
@@ -86,15 +87,27 @@ public class ImageFrameFiltered extends ImageFrame {
         }
 	}
 	
-	public Point getCarBoxMidPt(Rect car) {
-		int midX = (int)(car.tl().x + car.br().x) / 2;
-		int midY = (int)(car.tl().y + car.br().y) / 2;
+	public Point getCarBoxMidPt() {
+		int midX = (int)(carRect.tl().x + carRect.br().x) / 2;
+		int midY = (int)(carRect.tl().y + carRect.br().y) / 2;
 		
 		return new Point(midX, midY);
 	}
 	
-	public Color getCarColor(Rect car) {
-		Point middle = getCarBoxMidPt(car);
+	public Color getCarColor() {
+		Point middle = getCarBoxMidPt();
+		double[] pixelData = image.get((int)middle.x, (int)middle.y);
+		
+		// This is to fix a strange bug when the pixel data couldn't be acquired
+		if (pixelData == null) {
+			return new Color(0, 0, 0);
+		}
+		
+		double r = pixelData[2];
+		double g = pixelData[1];
+		double b = pixelData[0];
+		
+		return new Color((int)r, (int)g, (int)b);
 	}
 	
 	// Setter for carLine variable
@@ -104,7 +117,8 @@ public class ImageFrameFiltered extends ImageFrame {
 	
 	public Rect getCarBox() {
 		if (carContours != null && !(carContours.size() == 0)) {
-			return Imgproc.boundingRect(carContours.get(0));
+			carRect = Imgproc.boundingRect(carContours.get(0));
+			return carRect;
 		}
 		else {
 			return new Rect();

@@ -30,11 +30,11 @@ public class DataLogger {
 		BufferedWriter writer = new BufferedWriter(new FileWriter("LogFiles/" + date + ".txt"));
 		
 		// Header for log file
-		writer.write("Time [s]" + "\t\t" + "Speed [mph]" + "\t\t" + "Colors");
+		writer.write("Time [s]" + "\t\t" + "Speed [mph]" + "\t\t" + "Colors" + "\n");
 		
 		// Then write data from variables
 		for (int i = 0; i < times.size(); i++) {
-			writer.write(times.get(i) + "\t\t" + speeds.get(i) +"\t\t" + colors.get(i) + "\n");
+			writer.write(times.get(i) + "\t\t" + speeds.get(i) +"\t\t\t" + colors.get(i) + "\n");
 		}
 		
 		writer.flush();

@@ -6,6 +6,7 @@
 // Imports
 // Import java packages for graphics and arrays
 import java.awt.Color;
+import java.awt.Container;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -33,9 +34,7 @@ public class CarDetection {
 	
 	// General variables
 	private static int speedLimit = 25; 	// [mph]
-	//private static int frameRate = 30;
-	private static int frameRate = 10;
-	// 10 fps because sample images were taken every 0.1 sec so 10x per sec
+	private static int frameRate = 30;
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -43,32 +42,34 @@ public class CarDetection {
 		// Initialize image processing object
 		CarPipelineThree carDetector = new CarPipelineThree();
 		
-		// For image processing, load in baseline img for opencv absdiff
-		VideoCapture cap = new VideoCapture();
-		cap.open(0);
-		
+		// Initialize video capture object
+		VideoCap v = new VideoCap();
 
 		// Init graphics/GUI
 		// 1: Raw camera feed
-		JFrame raw = new ImageFrame();
-		raw.setTitle("Raw Image");
-		//raw.setLocation(0, 0);
-		raw.setSize(640, 480);					
-		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		JFrame raw = new VideoFrame(v);
+		raw.setTitle("Webcam Feed");
+		raw.setSize(665, 552);					// Possibly optimize this line
+		raw.setVisible(true);
+		raw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		// allows program termination when x is clicked on
+
+		// For image processing, load in baseline img for opencv absdiff
+		Mat baseline = new Mat();
+		((VideoFrame) raw).getFrameMat(baseline);
 		
 		// 2: Filtered camera feed
-		JFrame filtered = new ImageFrameFiltered();
+		JFrame filtered = new VideoFrame(v);
 		filtered.setLocation(640, 0);
 		filtered.setTitle("Filtered Image");
-		filtered.setSize(640, 480);				
+		filtered.setSize(665, 552);		
+		filtered.setVisible(true);
 		filtered.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		// Display raw image
 		raw.repaint();
+		filtered.repaint();
 		
 		
-		
-		String i = "1";
 		Rect prevCarBox = new Rect();
 		int framesSinceLastCar = 1;
 		
@@ -79,56 +80,44 @@ public class CarDetection {
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
 		
-		while (Integer.parseInt(i) <= 20) {
+		long counter = 0;
+		while (counter < 10000) {
 			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
+			raw.repaint();
+			filtered.repaint();
 			
-			if (Integer.parseInt(i) < 10) {
-				i = "0" + Integer.parseInt(i);
-				System.out.println(i);
-			}
-			
-			car = Imgcodecs.imread(new File("ImagesForPipeline/0" + i + ".jpeg").getPath());
-			((ImageFrame) raw).setCarImg(car);
-			raw.setVisible(true);
-			raw.setSize(640, 480);
-			raw.setTitle("Raw Image");
-			((ImageFrameFiltered) filtered).setCarImg(car);
-			filtered.setVisible(true);
-			filtered.setTitle("Filtered Image");
-			filtered.setSize(640, 480);	
-			filtered.setLocation(640, 0);
+			// Grab current raw frame 
+			Mat rawFrame = new Mat();
+			((VideoFrame) raw).getFrameMat(rawFrame);
 			
 			// Perform image processing on the car image
-			carDetector.process(car, baseline);
-			
-			//System.out.println(carDetector.cvAbsdiffOutput().size());
-			//System.out.println(carDetector.hsvThresholdOutput().size());
-			
+			carDetector.process(rawFrame, baseline);
+
 			// Obtain desired output from carDetector
-			//ArrayList<Line> lines = carDetector.filterLinesOutput();
 			ArrayList<MatOfPoint> carContour = carDetector.filterContoursOutput();
 			
 			// Display filter frame in new gui window
-			((ImageFrameFiltered) filtered).setCarContour(carContour);
+			((VideoFrame) filtered).setCarContour(carContour);
 			filtered.repaint();
 			
 			Point carBoxMidPt1 = getBoxMidPt(prevCarBox);
 			Point carBoxMidPt2 = new Point();
 			
-//			VideoCapture c = new VideoCapture();
-//			c.open(0);
-//			System.out.println(c.get(5));
+			// Display raw image
+			raw.repaint();
+			filtered.repaint();
 			
-			if (((ImageFrameFiltered) filtered).isCarDetected() == true) {
+			if (((VideoFrame) filtered).isCarDetected() == true) {
 				// If getter doesn't return new Rect object (meaning there is a car detected
-				prevCarBox = ((ImageFrameFiltered) filtered).getCarBox();	// Set prev car box to current car box
-				carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
+				prevCarBox = ((VideoFrame) filtered).getCarBox();	// Set prev car box to current car box
+				carBoxMidPt2 = getBoxMidPt(((VideoFrame) filtered).getCarBox());
 				//System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
 				//System.out.println(framesSinceLastCar);
 				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;
 				double speedRounded = (int)(speed * 100) / 100.0;
+				System.out.println(speedRounded);
 				
-				((ImageFrameFiltered) filtered).setCarSpeed(speedRounded);
+				((VideoFrame) filtered).setCarSpeed(speedRounded);
 				
 				// Add car data to array lists
 				LocalDateTime now = LocalDateTime.now();	
@@ -143,7 +132,7 @@ public class CarDetection {
 					isSpeeding.add(false);
 				}
 				
-				Color carColor = ((ImageFrameFiltered) filtered).getCarColor();
+				Color carColor = ((VideoFrame) filtered).getCarColor();
 				colors.add(carColor);
 				
 				
@@ -155,8 +144,8 @@ public class CarDetection {
 				framesSinceLastCar++;
 			}
 			
-			Thread.sleep(1000);
-			i = Integer.toString(Integer.parseInt(i) + 1);
+			//System.out.println(counter);
+			counter++;
 		}
 		
 		DataLogger d = new DataLogger(times, speeds, isSpeeding, colors);

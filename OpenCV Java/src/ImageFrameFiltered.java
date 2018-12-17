@@ -54,7 +54,7 @@ public class ImageFrameFiltered extends ImageFrame {
 		
 		// Draw car line
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(new Color(255, 0, 213));	// Set green line color
+		g2.setColor(new Color(255, 0, 213));
 		g2.setStroke(new BasicStroke(3));	// Set line width to 3px
 		
 		// Draw car rectangle
@@ -62,7 +62,7 @@ public class ImageFrameFiltered extends ImageFrame {
 		if (carContours != null && carContours.size() != 0) {
 			Rect carRect = getCarBox();
 			int x = (int)(carRect.tl().x);
-			int y = (int)(carRect.tl().y) + 30;
+			int y = (int)(carRect.tl().y) + 57;
 			g2.drawRect(x, y, carRect.width, carRect.height);	
 			// Do +30 or +57 on y coordinate depending on which computer program is run on
 			

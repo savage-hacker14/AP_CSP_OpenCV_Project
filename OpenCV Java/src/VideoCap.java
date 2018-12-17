@@ -1,5 +1,5 @@
 import java.awt.image.*;
-import org.opencv.core.Core;
+import org.opencv.core.*;
 import org.opencv.videoio.VideoCapture;
 
 public class VideoCap {
@@ -22,7 +22,12 @@ public class VideoCap {
     } 
  
     BufferedImage getOneFrame() {
-        cap.read(mat2Img.mat);
+    	grab(mat2Img.mat);
         return mat2Img.getImage(mat2Img.mat);
+    }
+    
+    void grab(Mat matToSet) {
+    	cap.grab();
+    	cap.retrieve(matToSet, 0);
     }
 }

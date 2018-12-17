@@ -79,6 +79,7 @@ public class CarDetection_2Frames {
 		
 		ArrayList<String> times = new ArrayList<String>();
 		ArrayList<Double> speeds = new ArrayList<Double>();
+		ArrayList<Boolean> isSpeeding = new ArrayList<Boolean>();
 		ArrayList<Color> colors = new ArrayList<Color>();
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
@@ -129,22 +130,24 @@ public class CarDetection_2Frames {
 				carBoxMidPt2 = getBoxMidPt(((ImageFrameFiltered) filtered).getCarBox());
 				//System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
 				//System.out.println(framesSinceLastCar);
-				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;	
-				int speedRounded;
-				if (speed - (int)speed < 0.5) {
-					speedRounded = (int)speed;
-				}
-				else {
-					speedRounded = (int)(speed + 1);
-				}
+				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;
+				double speedRounded = (int)(speed * 100) / 100.0;
 				
 				((ImageFrameFiltered) filtered).setCarSpeed(speedRounded);
 				
 				// Add car data to array lists
 				LocalDateTime now = LocalDateTime.now();	
-				String time = now.toString().substring(11, 19);
+				String time = now.toString().substring(11);
 				times.add(time);
 				speeds.add(new Double(speedRounded));
+				
+				if (speed > speedLimit) {
+					isSpeeding.add(true);
+				}
+				else {
+					isSpeeding.add(false);
+				}
+				
 				Color carColor = ((ImageFrameFiltered) filtered).getCarColor();
 				colors.add(carColor);
 				
@@ -161,7 +164,7 @@ public class CarDetection_2Frames {
 			i = Integer.toString(Integer.parseInt(i) + 1);
 		}
 		
-		DataLogger d = new DataLogger(times, speeds, colors);
+		DataLogger d = new DataLogger(times, speeds, isSpeeding, colors);
 		try {
 			System.out.print("Logging data...\t");
 			d.logData();
@@ -174,6 +177,7 @@ public class CarDetection_2Frames {
 		// Clear time, speed, and color lists
 		times = null;
 		speeds = null;
+		isSpeeding = null;
 		colors = null;
 	}
 	

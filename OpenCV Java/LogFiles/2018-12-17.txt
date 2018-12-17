@@ -1,0 +1,24 @@
+2018-12-17.txt
+
+Time [s]		Speed [mph]		Is Speeding?		Colors
+------------------------------------------------------------------------------------
+09:54:22.551	68.75			true				java.awt.Color[r=58,g=42,b=42]
+09:54:23.574	17.57			false				java.awt.Color[r=39,g=36,b=31]
+09:54:24.594	19.86			false				java.awt.Color[r=224,g=213,b=207]
+09:54:25.616	12.98			false				java.awt.Color[r=54,g=42,b=28]
+09:54:30.716	25.36			true				java.awt.Color[r=124,g=115,b=74]
+09:54:31.737	27.5			true				java.awt.Color[r=124,g=95,b=53]
+09:54:32.758	29.79			true				java.awt.Color[r=124,g=122,b=71]
+09:54:33.777	23.68			false				java.awt.Color[r=125,g=123,b=72]
+09:54:34.804	34.37			true				java.awt.Color[r=132,g=133,b=89]
+09:54:35.823	42.01			true				java.awt.Color[r=0,g=0,b=0]
+09:54:36.841	29.02			true				java.awt.Color[r=0,g=0,b=0]
+09:54:37.860	27.5			true				java.awt.Color[r=141,g=136,b=96]
+09:54:38.881	19.09			false				java.awt.Color[r=135,g=134,b=77]
+09:54:39.903	25.97			true				java.awt.Color[r=129,g=111,b=71]
+09:54:40.922	24.44			false				java.awt.Color[r=127,g=98,b=66]
+09:54:41.943	17.57			false				java.awt.Color[r=110,g=84,b=47]
+
+Stats: 
+Average Speed [mph]:		27.84
+Number of Speeding Cars:	9

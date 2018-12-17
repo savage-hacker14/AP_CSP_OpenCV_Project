@@ -62,7 +62,7 @@ public class ImageFrameFiltered extends ImageFrame {
 		if (carContours != null && carContours.size() != 0) {
 			Rect carRect = getCarBox();
 			int x = (int)(carRect.tl().x);
-			int y = (int)(carRect.tl().y) + 57;
+			int y = (int)(carRect.tl().y) + 30;
 			g2.drawRect(x, y, carRect.width, carRect.height);	
 			// Do +30 or +57 on y coordinate depending on which computer program is run on
 			

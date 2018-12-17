@@ -31,6 +31,7 @@ public class DataLogger {
 		
 		// Header for log file
 		writer.write("Time [s]" + "\t\t" + "Speed [mph]" + "\t\t" + "Colors" + "\n");
+		writer.write("-------------------------------------------------------------\n");
 		
 		// Then write data from variables
 		for (int i = 0; i < times.size(); i++) {

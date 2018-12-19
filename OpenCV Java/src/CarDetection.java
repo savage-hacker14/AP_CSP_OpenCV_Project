@@ -86,6 +86,13 @@ public class CarDetection {
 			raw.repaint();
 			filtered.repaint();
 			
+			
+			// Every 10 frames, update baseline
+			if (counter % 30 == 0) {
+				((VideoFrame) raw).getFrameMat(baseline);
+				System.out.println("Updated baseline!");
+			}
+			
 			// Grab current raw frame 
 			Mat rawFrame = new Mat();
 			((VideoFrame) raw).getFrameMat(rawFrame);
@@ -111,7 +118,7 @@ public class CarDetection {
 				// If getter doesn't return new Rect object (meaning there is a car detected
 				prevCarBox = ((VideoFrame) filtered).getCarBox();	// Set prev car box to current car box
 				carBoxMidPt2 = getBoxMidPt(((VideoFrame) filtered).getCarBox());
-				//System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
+				System.out.print(carBoxMidPt1 + "\t" + carBoxMidPt2 + "\n");
 				//System.out.println(framesSinceLastCar);
 				double speed = getCarSpeed(carBoxMidPt1, carBoxMidPt2) / framesSinceLastCar;
 				double speedRounded = (int)(speed * 100) / 100.0;

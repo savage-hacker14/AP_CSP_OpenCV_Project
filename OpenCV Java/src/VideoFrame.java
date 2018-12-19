@@ -76,6 +76,9 @@ public class VideoFrame extends JFrame {
         if (c != null && c.size() != 0) {
         	carDetected = true;
         }
+        else {
+        	carDetected = false;
+        }
 	}
 	
 	public Point getCarBoxMidPt() {

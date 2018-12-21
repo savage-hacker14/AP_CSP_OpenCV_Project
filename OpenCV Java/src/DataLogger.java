@@ -24,17 +24,15 @@ public class DataLogger {
 	}
 	
 	public void logData() throws IOException {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		// Acquire date from system
 		LocalDateTime now = LocalDateTime.now();
-		
 		String date = now.toString().substring(0, 10);
 		
+		// Create writer object
 		BufferedWriter writer = new BufferedWriter(new FileWriter("LogFiles/" + date + ".txt"));
 		
-		// Header for log file
-		writer.write(date + ".txt" + "\n\n");
-		writer.write("Time [s]" + "\t\t" + "Speed [mph]" + "\t\t" + "Is Speeding?" + "\t\t" + "Colors" + "\n");
-		writer.write("------------------------------------------------------------------------------------\n");
+		// Write header for .txt file
+		writeHeader(writer, date);
 		
 		// Then write data from variables
 		for (int i = 0; i < times.size(); i++) {
@@ -43,11 +41,21 @@ public class DataLogger {
 		
 		calculateStats(writer);
 		
+		// Flush text from buffer and write it to th3w
 		writer.flush();
 		writer.close();
 	}
 	
-	public void calculateStats(BufferedWriter writer) throws IOException {
+	private void writeHeader(BufferedWriter writer, String date) throws IOException {	
+		String loggedVars = "Time [s]" + "\t\t" + "Speed [mph]" + "\t\t" + "Is Speeding?" + "\t\t" + "Color" + "\n";
+		String lineBreak = "------------------------------------------------------------------------------------\n";
+		
+		writer.write(date + ".txt" + "\n\n");
+		writer.write(loggedVars);
+		writer.write(lineBreak);	
+	}
+	
+	private void calculateStats(BufferedWriter writer) throws IOException {
 		writer.write("\n");
 		writer.write("Compiled Statistics: \n");
 		writer.write("Average Speed [mph]:\t\t" + averageSpeed() + "\n");

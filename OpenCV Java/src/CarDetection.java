@@ -34,7 +34,8 @@ public class CarDetection {
 	
 	// General variables
 	private static int speedLimit = 25; 	// [mph]
-	private static int frameRate = 30;
+	private static int frameRate;
+	private static int speedingCarCounter = 1;
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -82,6 +83,8 @@ public class CarDetection {
 		
 		long counter = 0;
 		while (counter < 10000) {
+			long start = System.currentTimeMillis();
+			
 			//System.out.print(filtered.getWidth() + "\t" + filtered.getHeight() + "\n");
 			raw.repaint();
 			filtered.repaint();
@@ -90,7 +93,7 @@ public class CarDetection {
 			// Every 10 frames, update baseline
 			if (counter % 30 == 0) {
 				((VideoFrame) raw).getFrameMat(baseline);
-				System.out.println("Updated baseline!");
+				//System.out.println("Updated baseline!");
 			}
 			
 			// Grab current raw frame 
@@ -105,7 +108,7 @@ public class CarDetection {
 			
 			// Display filter frame in new gui window
 			((VideoFrame) filtered).setCarContour(carContour);
-			filtered.repaint();
+			//filtered.repaint();
 			
 			Point carBoxMidPt1 = getBoxMidPt(prevCarBox);
 			Point carBoxMidPt2 = new Point();
@@ -134,6 +137,7 @@ public class CarDetection {
 				
 				if (speed > speedLimit) {
 					isSpeeding.add(true);
+					saveSpeedingCar((VideoFrame) filtered);
 				}
 				else {
 					isSpeeding.add(false);
@@ -153,6 +157,12 @@ public class CarDetection {
 			
 			//System.out.println(counter);
 			counter++;
+			
+			long end = System.currentTimeMillis();
+			long elapsedMS = end - start;
+			double elapsedSEC = elapsedMS / 1000.0;
+			frameRate = (int)(1 / elapsedSEC);
+			//System.out.println("Loop time: " + elapsedSEC);
 		}
 		
 		DataLogger d = new DataLogger(times, speeds, isSpeeding, colors);
@@ -210,6 +220,16 @@ public class CarDetection {
 		double mph = miPerS * (1 / secToHr);
 		
 		return mph;
+	}
+	
+	public static void saveSpeedingCar(VideoFrame f) {
+		Mat carMat = new Mat();
+		f.getFrameMat(carMat);
+		
+		Imgcodecs.imwrite("LogFiles/SpeedingCarFrames/SpeedingCar" + speedingCarCounter + ".jpg", carMat);
+		System.out.println("File saved!");
+		
+		speedingCarCounter++;
 	}
 	
 	/**

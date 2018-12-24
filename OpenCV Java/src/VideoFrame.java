@@ -55,7 +55,9 @@ public class VideoFrame extends JFrame {
 			int x = (int)(carRect.tl().x);
 			int y = (int)(carRect.tl().y);
 			g2.drawRect(x, y, carRect.width, carRect.height);	
-			// Do +30 or +57 on y coordinate depending on which computer program is run on
+			
+			Point carMidPt = getCarBoxMidPt();
+			g2.drawRect((int)carMidPt.x, (int)carMidPt.y, 1, 1);
 			
 			// Draw car speed above box
 			g2.setColor(new Color(255, 255, 0));	

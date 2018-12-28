@@ -2,23 +2,23 @@
 
 Time [s]		Speed [mph]		Is Speeding?		Color
 ------------------------------------------------------------------------------------
-14:00:43.267	68.75			true				java.awt.Color[r=58,g=42,b=42]
-14:00:44.298	17.57			false				java.awt.Color[r=39,g=36,b=31]
-14:00:45.330	19.86			false				java.awt.Color[r=224,g=213,b=207]
-14:00:46.367	12.98			false				java.awt.Color[r=54,g=42,b=28]
-14:00:51.514	25.36			true				java.awt.Color[r=124,g=115,b=74]
-14:00:52.542	27.5			true				java.awt.Color[r=124,g=95,b=53]
-14:00:53.579	29.79			true				java.awt.Color[r=124,g=122,b=71]
-14:00:54.603	23.68			false				java.awt.Color[r=125,g=123,b=72]
-14:00:55.645	34.37			true				java.awt.Color[r=132,g=133,b=89]
-14:00:56.671	42.01			true				java.awt.Color[r=0,g=0,b=0]
-14:00:57.702	29.02			true				java.awt.Color[r=0,g=0,b=0]
-14:00:58.731	27.5			true				java.awt.Color[r=141,g=136,b=96]
-14:00:59.751	19.09			false				java.awt.Color[r=135,g=134,b=77]
-14:01:00.781	25.97			true				java.awt.Color[r=129,g=111,b=71]
-14:01:01.810	24.44			false				java.awt.Color[r=127,g=98,b=66]
-14:01:02.837	17.57			false				java.awt.Color[r=110,g=84,b=47]
+14:10:28.358	68.75			true				java.awt.Color[r=58,g=42,b=42]
+14:10:29.389	17.57			false				java.awt.Color[r=39,g=36,b=31]
+14:10:30.416	19.86			false				java.awt.Color[r=224,g=213,b=207]
+14:10:31.444	12.98			false				java.awt.Color[r=54,g=42,b=28]
+14:10:36.585	25.36			true				java.awt.Color[r=124,g=115,b=74]
+14:10:37.617	27.5			true				java.awt.Color[r=124,g=95,b=53]
+14:10:38.655	29.79			true				java.awt.Color[r=124,g=122,b=71]
+14:10:39.683	23.68			false				java.awt.Color[r=125,g=123,b=72]
+14:10:40.729	34.37			true				java.awt.Color[r=132,g=133,b=89]
+14:10:41.755	42.01			true				java.awt.Color[r=0,g=0,b=0]
+14:10:42.782	29.02			true				java.awt.Color[r=0,g=0,b=0]
+14:10:43.807	27.5			true				java.awt.Color[r=141,g=136,b=96]
+14:10:44.834	19.09			false				java.awt.Color[r=135,g=134,b=77]
+14:10:45.858	25.97			true				java.awt.Color[r=129,g=111,b=71]
+14:10:46.877	24.44			false				java.awt.Color[r=127,g=98,b=66]
+14:10:47.898	17.57			false				java.awt.Color[r=110,g=84,b=47]
 
 Compiled Statistics: 
 Average Speed [mph]:		27.84
-Number of Speeding Cars:	9
+Frames w/ Speeding Cars:	9

@@ -59,7 +59,7 @@ public class DataLogger {
 		writer.write("\n");
 		writer.write("Compiled Statistics: \n");
 		writer.write("Average Speed [mph]:\t\t" + averageSpeed() + "\n");
-		writer.write("Number of Speeding Cars:\t" + numSpeedingCars() + "\n");
+		writer.write("Frames w/ Speeding Cars:\t" + numSpeedingCars() + "\n");
 	}
 	
 	private double averageSpeed() {

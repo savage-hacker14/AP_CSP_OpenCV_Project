@@ -1,10 +1,6 @@
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.highgui.*;
-import org.opencv.imgproc.Imgproc;
 
 // From link:
 // http://computervisionandjava.blogspot.com/2013/10/java-opencv-webcam.html

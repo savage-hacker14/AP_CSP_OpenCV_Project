@@ -1,18 +1,16 @@
 // Graphics Packages
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.border.*;
 
+// OpenCV packages
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
-// OpenCV Packages
-import org.opencv.videoio.*;
 
 public class VideoFrame extends JFrame {
 	private JPanel contentPane;
